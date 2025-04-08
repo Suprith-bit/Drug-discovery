@@ -1,0 +1,11 @@
+{
+  "batch_size": 64,
+  "generator_epochs": 50,
+  "discriminator_epochs": 30,
+  "gan_epochs": 100,
+  "generator_lr": 1e-4,
+  "discriminator_lr": 5e-5,
+  "rl_generator_lr": 1e-5,
+  "rl_discriminator_lr": 5e-6,
+  "n_samples_per_epoch": 1000
+}

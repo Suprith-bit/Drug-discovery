@@ -1,0 +1,12 @@
+{
+    "max_seq_length": 100,
+    "generator_embedding_dim": 128,
+    "generator_hidden_dim": 512,
+    "generator_n_layers": 3,
+    "generator_dropout": 0.3,
+    "discriminator_embedding_dim": 128,
+    "discriminator_hidden_dim": 256,
+    "discriminator_n_layers": 2,
+    "n_molecular_properties": 5,
+    "discriminator_dropout": 0.2
+}
