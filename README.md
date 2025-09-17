@@ -2,17 +2,11 @@
   <img src="https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white" alt="Python"/>
   <img src="https://img.shields.io/badge/PyTorch-Deep%20Learning-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch"/>
   <img src="https://img.shields.io/badge/RDKit-Cheminformatics-00A859" alt="RDKit"/>
-  <img src="https://img.shields.io/badge/License-MIT-43A047" alt="MIT"/>
 </p>
 
 <h1 align="center">🧬 Drug Discovery GAN</h1>
-<p align="center">
-  <b>Generate novel, valid, and diverse drug-like molecules using GANs + Reinforcement Learning</b>
-</p>
-
-<p align="center">
-  <sub>Project by <a href="https://github.com/Suprith-bit">Suprith-bit</a></sub>
-</p>
+<p align="center"><b>Generate novel, valid, and diverse drug‑like molecules using GANs + Reinforcement Learning</b></p>
+<p align="center"><sub>Project by <a href="https://github.com/Suprith-bit">Suprith-bit</a></sub></p>
 
 ---
 
@@ -25,19 +19,6 @@ Drug Discovery GAN is a research-grade, end-to-end pipeline for de novo molecule
 - Robust evaluation (validity, uniqueness, novelty) and rich visualizations.
 
 Core stack: PyTorch, RDKit, NumPy, Pandas, Matplotlib.
-
----
-
-## ✨ Highlights
-
-- 🎯 End-to-end workflow: data → training → generation → evaluation → visualization
-- 🧠 Sequence Generator: `SMILESGenerator` (LSTM-based)
-- 🧪 Discriminator with property head: `MolecularDiscriminator` predicts molecular properties alongside real/fake
-- 🤝 Integrated model wrapper: `DrugGAN` orchestrates generator/discriminator and sampling
-- 📊 Metrics: validity, uniqueness, novelty (`utils.molecular_metrics`)
-- 🖼️ Visuals: Molecule grids, property distribution plots, training curves (`utils.visualization.MoleculeVisualizer`)
-- ⚙️ Fully configurable via JSON (`configs/model_config.json`, `configs/training_config.json`)
-- 🧰 Clean CLI in `src/main.py` to pretrain, train, generate, and evaluate
 
 ---
 
@@ -58,7 +39,7 @@ flowchart LR
 
 ## 🖼️ Visual Gallery
 
-The following images live in the repo under `assets/plots/` so they always display on GitHub. When you run an experiment, overwrite these placeholders with real outputs using the script below.
+Images live in `assets/plots/` so they always display on GitHub. After runs, you can overwrite them using the script below.
 
 <p align="center">
   <img src="assets/plots/sample_molecules.svg" alt="Sample Generated Molecules" width="48%"/>
@@ -127,24 +108,6 @@ bash scripts/prepare_readme_assets.sh readme-demo
 
 ---
 
-## 🔍 What’s Inside the Models
-
-- Generator: `SMILESGenerator` (LSTM)
-  - Embedding → LSTM (n_layers) → Linear → Token distribution
-  - Temperature-controlled multinomial sampling for diversity
-
-- Discriminator: `MolecularDiscriminator`
-  - `MolecularCNN` feature extractor over token sequences
-  - Heads:
-    - Real/Fake classifier (GAN signal)
-    - Property predictor (`PropertyPredictor`) for learning chemically meaningful features
-
-- Integrated: `DrugGAN`
-  - Orchestrates training, sampling, save/load
-  - Returns valid canonical SMILES using RDKit
-
----
-
 ## 📊 Evaluation
 
 Key metrics from `utils.molecular_metrics`:
@@ -183,6 +146,6 @@ Run the helper script to mirror plots into `assets/plots/` for display.
 
 ## 📄 License
 
-If you plan to add a license, create a LICENSE file (e.g., MIT) and update badges accordingly.
+MIT License. See LICENSE for details.
 
 ---
