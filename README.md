@@ -20,7 +20,7 @@
 
 Drug Discovery GAN is a research-grade, end-to-end pipeline for de novo molecule generation. It combines:
 - A sequence-based Generator (SMILES) built with LSTMs,
-- A Discriminator with CNN feature extraction and a multi-head design (real/fake + property prediction),
+- A Discriminator with CNN feature extraction and a dual-head design (real/fake + property prediction),
 - A training loop that supports supervised pretraining and GAN training enhanced with reinforcement signals,
 - Robust evaluation (validity, uniqueness, novelty) and rich visualizations.
 
@@ -45,45 +45,40 @@ Core stack: PyTorch, RDKit, NumPy, Pandas, Matplotlib.
 
 ```mermaid
 flowchart LR
-    A[SMILES Dataset] --> B[Preprocess & Tokenize<br/>(SMILESPreprocessor)]
-    B --> C[Generator (LSTM)<br/>SMILESGenerator]
-    C --> D[Sample SMILES]
-    D --> E[RDKit Validation<br/>Canonicalization]
-    E --> F[Discriminator (CNN + Heads)<br/>MolecularDiscriminator]
-    F -->|Rewards, Properties| C
-    F --> G[Metrics & Plots<br/>(Validity, Uniqueness, Novelty)]
+  A[SMILES Dataset] --> B[Preprocess & Tokenize (SMILESPreprocessor)]
+  B --> C[Generator (LSTM) - SMILESGenerator]
+  C --> D[Sample SMILES]
+  D --> E[RDKit Validation / Canonicalization]
+  E --> F[Discriminator (CNN + Property Head) - MolecularDiscriminator]
+  F --> C
+  F --> G[Metrics & Plots (Validity · Uniqueness · Novelty)]
 ```
 
 ---
 
 ## 🖼️ Visual Gallery
 
-Below images are saved by the pipeline inside `data/results/<experiment_name>/plots/`.
-You can keep a stable name like `example_experiment` to have persistent links:
+The following images live in the repo under `assets/plots/` so they always display on GitHub. When you run an experiment, overwrite these placeholders with real outputs using the script below.
 
 <p align="center">
-  <img src="data/results/example_experiment/plots/sample_molecules.png" alt="Sample Generated Molecules" width="48%"/>
-  <img src="data/results/example_experiment/plots/qed_distribution.png" alt="QED Distribution" width="48%"/>
+  <img src="assets/plots/sample_molecules.svg" alt="Sample Generated Molecules" width="48%"/>
+  <img src="assets/plots/qed_distribution.svg" alt="QED Distribution" width="48%"/>
 </p>
-
 <p align="center">
-  <img src="data/results/example_experiment/plots/molwt_distribution.png" alt="Molecular Weight Distribution" width="48%"/>
-  <img src="data/results/example_experiment/plots/logp_distribution.png" alt="LogP Distribution" width="48%"/>
+  <img src="assets/plots/molwt_distribution.svg" alt="Molecular Weight Distribution" width="48%"/>
+  <img src="assets/plots/logp_distribution.svg" alt="LogP Distribution" width="48%"/>
 </p>
-
 <p align="center">
-  <img src="data/results/example_experiment/plots/chemical_space_pca.png" alt="Chemical Space (PCA)" width="60%"/>
+  <img src="assets/plots/chemical_space_pca.svg" alt="Chemical Space (PCA)" width="60%"/>
 </p>
 
 Training curves:
-
 <p align="center">
-  <img src="data/results/example_experiment/plots/generator_pretraining_loss.png" alt="Generator Pretraining Loss" width="48%"/>
-  <img src="data/results/example_experiment/plots/discriminator_pretraining_loss.png" alt="Discriminator Pretraining Loss" width="48%"/>
+  <img src="assets/plots/generator_pretraining_loss.svg" alt="Generator Pretraining Loss" width="48%"/>
+  <img src="assets/plots/discriminator_pretraining_loss.svg" alt="Discriminator Pretraining Loss" width="48%"/>
 </p>
-
 <p align="center">
-  <img src="data/results/example_experiment/plots/gan_training_history.png" alt="GAN Training History" width="60%"/>
+  <img src="assets/plots/gan_training_history.svg" alt="GAN Training History" width="60%"/>
 </p>
 
 ---
@@ -92,50 +87,43 @@ Training curves:
 
 ```
 src/
-  ├── data/
-  │   ├── data_loader.py         # Load ZINC/CSV, split, property calc
-  │   └── __init__.py            # SMILESDataset, Preprocessor, augmentation
-  ├── models/
-  │   ├── generator.py           # LSTM SMILESGenerator
-  │   ├── discriminator.py       # CNN feature extractor + property head
-  │   └── gan.py                 # DrugGAN wrapper (save/load, sampling)
-  ├── training/
-  │   ├── supervised.py          # Pretrain generator/discriminator
-  │   └── reinforcement.py       # GAN + RL training loop
-  ├── utils/
-  │   ├── molecular_metrics.py   # validity, uniqueness, novelty
-  │   └── visualization.py       # Molecule grids & plots
-  └── main.py                    # CLI entrypoint
+  ├── data/                 # Loading, preprocessing, augmentation
+  ├── models/               # Generator, Discriminator, GAN
+  ├── training/             # Supervised + RL training
+  ├── utils/                # Metrics, visualization
+  └── main.py               # CLI entrypoint
 configs/
+assets/
+  └── plots/                # Images used in README (committed)
 data/
-  ├── raw/                       # Input SMILES (e.g., ZINC)
+  ├── raw/                  # Input SMILES
   ├── processed/
-  └── results/                   # Experiments, models, plots
+  └── results/              # Experiment outputs (not referenced directly by README)
 ```
 
 ---
 
 ## ⚡ Quickstart
 
-- Install dependencies:
+Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-- Train with GAN + RL:
+Train with GAN + RL:
 ```bash
-python src/main.py --train_gan
+python src/main.py --train_gan --experiment_name readme-demo
 ```
 
-- Generate molecules with a trained model:
+Generate molecules with a trained model:
 ```bash
-python src/main.py --generate_only --load_gan data/results/example_experiment/models/trained_gan.pt
+python src/main.py --generate_only --load_gan data/results/readme-demo/models/trained_gan.pt
 ```
 
-- Useful flags (see `src/main.py`):
-  - `--pretrain_generator`, `--pretrain_discriminator`, `--train_gan`
-  - `--num_molecules`, `--temperature`, `--device`
-  - `--config`, `--training_config`, `--experiment_name`
+Copy the latest plots into the README assets (overwrites placeholders):
+```bash
+bash scripts/prepare_readme_assets.sh readme-demo
+```
 
 ---
 
@@ -167,13 +155,16 @@ Key metrics from `utils.molecular_metrics`:
 Outputs are written as:
 - `data/results/<experiment_name>/molecules/generated_molecules.csv`
 - `data/results/<experiment_name>/molecules/evaluation_results.json`
+- `data/results/<experiment_name>/plots/*.png`
+
+Run the helper script to mirror plots into `assets/plots/` for display.
 
 ---
 
-## 🧑‍💻 What I Did (Resume-Ready)
+## 🧑‍💻 What I Did (Resume‑Ready)
 
-- Designed and implemented a full deep learning pipeline to generate de novo drug-like molecules using GANs with reinforcement objectives, in PyTorch and RDKit.
-- Built an LSTM-based SMILES generator and a CNN-based discriminator with dual heads for adversarial training and molecular property prediction.
+- Designed and implemented a full deep learning pipeline to generate de novo drug‑like molecules using GANs with reinforcement objectives, in PyTorch and RDKit.
+- Built an LSTM‑based SMILES generator and a CNN‑based discriminator with dual heads for adversarial training and molecular property prediction.
 - Engineered data ingestion, validation, and preprocessing for large SMILES datasets, including canonicalization and augmentation.
 - Implemented rigorous evaluation (validity, uniqueness, novelty) and integrated RDKit property computations for scientific relevance.
 - Automated visualization of results including molecule grids, property distributions (QED, MolWt, LogP), training curves, and chemical space projections.
@@ -192,6 +183,6 @@ Outputs are written as:
 
 ## 📄 License
 
-MIT License. See [LICENSE](LICENSE) for details.
+If you plan to add a license, create a LICENSE file (e.g., MIT) and update badges accordingly.
 
 ---
