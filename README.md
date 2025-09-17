@@ -45,13 +45,13 @@ Core stack: PyTorch, RDKit, NumPy, Pandas, Matplotlib.
 
 ```mermaid
 flowchart LR
-  A[SMILES Dataset] --> B[Preprocess & Tokenize (SMILESPreprocessor)]
-  B --> C[Generator (LSTM) - SMILESGenerator]
-  C --> D[Sample SMILES]
-  D --> E[RDKit Validation / Canonicalization]
-  E --> F[Discriminator (CNN + Property Head) - MolecularDiscriminator]
+  A["SMILES dataset"] --> B["Preprocess and tokenize"]
+  B --> C["Generator (LSTM)"]
+  C --> D["Sample SMILES"]
+  D --> E["RDKit validation and canonicalization"]
+  E --> F["Discriminator (CNN + property head)"]
   F --> C
-  F --> G[Metrics & Plots (Validity · Uniqueness · Novelty)]
+  F --> G["Metrics and plots (validity, uniqueness, novelty)"]
 ```
 
 ---
