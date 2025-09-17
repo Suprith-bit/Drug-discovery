@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+  <rect width="100%" height="100%" fill="#0d1117"/>
+  <text x="50%" y="45%" fill="#58a6ff" font-size="26" text-anchor="middle" font-family="Segoe UI, Roboto, Helvetica, sans-serif">Sample Generated Molecules</text>
+  <text x="50%" y="58%" fill="#8b949e" font-size="16" text-anchor="middle" font-family="Segoe UI, Roboto, Helvetica, sans-serif">Placeholder — run training and copy real plot here</text>
+</svg>
